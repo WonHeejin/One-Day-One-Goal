@@ -252,3 +252,17 @@ input[type=range]:focus::-ms-fill-upper {
 .highlight {
 	background-color: #B7F8C7;
 }
+/*goal-list ghostClass*/
+.goal-background-class {
+    background-color: gray;
+}
+
+/*success-list ghostClass*/
+.success-background-class {
+    background-color: green;
+}
+
+/*fail-list ghostClass*/
+.fail-background-class {
+    background-color: red;
+}
