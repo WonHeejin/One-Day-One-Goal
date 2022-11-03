@@ -14,7 +14,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @RunWith(SpringRunner.class)
-public class GoalControllerTest {
+public class IndexControllerTest {
 
     @Autowired
     TestRestTemplate restTemplate;
