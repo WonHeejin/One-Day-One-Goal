@@ -7,33 +7,31 @@
 
 <div id="simple-list" class="row">
     <h4 class="col-12">Simple list example</h4>
-    <div id="example1" class="list-group col">
-        <div class="list-group-item static" style="background:gray;">목표</div>
-        <div class="list-group-item"><input type="text"></div>
-        <div class="list-group-item">Item 2<button type="button" class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></button></div>
-        <div class="list-group-item">Item 3</div>
-        <div class="list-group-item">Item 4</div>
-        <div class="list-group-item">Item 5</div>
-        <div class="list-group-item">Item 6</div>
-        <div class="">+</div>
+    <div id="goals_table" class="list-group col">
+        <div class="list-group-item" style="background:gray;">목표</div>
+        <div class="list-group-item">
+            <input type="text" id="new-goal" placeholder="ex) 8시에 일어나기"/>
+                <div style="float:right;">
+                    <button type="button" class="btn btn-outline-success" id="btn-add">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
+        </div>
+        <div class="list-group-item goal">Item 2<button type="button" class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></button></div>
+        <div class="list-group-item goal">Item 3</div>
+        <div class="list-group-item goal">Item 4</div>
+        <div class="list-group-item goal">Item 5</div>
+        <div class="list-group-item goal">Item 6</div>
     </div>
-    <div id="example2" class="list-group col">
-        <div class="list-group-item static" style="background:green;">성공</div>
-        <div class="list-group-item">Item 1</div>
-        <div class="list-group-item">Item 2</div>
-        <div class="list-group-item">Item 3</div>
-        <div class="list-group-item">Item 4</div>
-        <div class="list-group-item">Item 5</div>
-        <div class="list-group-item">Item 6</div>
+    <div id="success_table" class="list-group col">
+        <div class="list-group-item" style="background:green;">성공</div>
+        <div class="list-group-item goal">Item 1</div>
+        <div class="list-group-item goal">Item 2</div>
     </div>
-    <div id="example3" class="list-group col">
-        <div class="list-group-item static" style="background:red;">실패</div>
-        <div class="list-group-item">Item 1</div>
-        <div class="list-group-item">Item 2</div>
-        <div class="list-group-item">Item 3</div>
-        <div class="list-group-item">Item 4</div>
-        <div class="list-group-item">Item 5</div>
-        <div class="list-group-item">Item 6</div>
+    <div id="fail_table" class="list-group col">
+        <div class="list-group-item" style="background:red;">실패</div>
+        <div class="list-group-item goal">Item 1</div>
+        <div class="list-group-item goal">Item 2</div>
     </div>
 </div>
 {{>layout/footer}}
