@@ -11,17 +11,26 @@
         <div class="list-group-item" style="background:gray;">목표</div>
         <div class="list-group-item">
             <input type="text" id="new-goal" placeholder="ex) 8시에 일어나기"/>
-                <div style="float:right;">
+                <div class="list-button">
                     <button type="button" class="btn btn-outline-success" id="btn-add">
                         <i class="bi bi-plus-lg"></i>
                     </button>
                 </div>
         </div>
-        <div class="list-group-item goal">Item 2<button type="button" class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></button></div>
-        <div class="list-group-item goal">Item 3</div>
-        <div class="list-group-item goal">Item 4</div>
-        <div class="list-group-item goal">Item 5</div>
-        <div class="list-group-item goal">Item 6</div>
+        <div class="list-group-item goal">Item 2
+            <div class="list-button">
+                <button type="button" class="btn btn-outline-danger delete">
+                    <i class="bi bi-trash-fill"></i>
+                </button>
+            </div>
+        </div>
+        <div class="list-group-item goal">Item 3
+            <div class="list-button">
+                <button type="button" class="btn btn-outline-danger delete">
+                    <i class="bi bi-trash-fill"></i>
+                </button>
+            </div>
+        </div>
     </div>
     <div id="success_table" class="list-group col">
         <div class="list-group-item" style="background:green;">성공</div>
