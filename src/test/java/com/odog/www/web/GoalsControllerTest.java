@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odog.www.domain.goals.Goals;
 import com.odog.www.domain.goals.GoalsRepository;
 import com.odog.www.web.dto.GoalsSaveRequestDto;
+import com.odog.www.web.dto.StateUpdateRequestDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,11 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -54,30 +54,57 @@ public class GoalsControllerTest {
     }
 
     @Test
-    public void saveAll_Test() throws Exception {
+    public void save_Test() throws Exception {
         //given
-        List<GoalsSaveRequestDto> list = new ArrayList<>();
         String text = "test_text";
         String state = "goals";
         String userId = "test_user";
         String url = "http://localhost:"+port+"/goals";
-        int i = 10;
-        while (i --> 0) { //9~0까지
-            GoalsSaveRequestDto goals = GoalsSaveRequestDto.builder()
-                    .state(state)
-                    .userId(userId + i)
-                    .text(text + i)
-                    .build();
-            list.add(goals);
-        }
+        GoalsSaveRequestDto goals = GoalsSaveRequestDto.builder()
+                .state(state)
+                .userId(userId)
+                .text(text)
+                .build();
         //when
         mvc.perform(post(url)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(new ObjectMapper().writeValueAsString(list)))
+                .content(new ObjectMapper().writeValueAsString(goals)))
                 .andExpect(status().isOk());
         //then
         List<Goals> response = goalsRepository.findAll();
-        assertThat(response.get(0).getText()).isEqualTo("test_text9");
+
+        assertThat(response.get(0).getId()).isEqualTo(1);
+        assertThat(response.get(0).getText()).isEqualTo("test_text");
+    }
+
+    @Test
+    public void stateUpdate_Test() throws Exception {
+        //given
+        String text = "test_text";
+        String state = "goal";
+        String userId = "test_user";
+        String url = "http://localhost:"+port+"/goals/state/";
+        String state2 = "success";
+        Goals savedGoal = goalsRepository.save(Goals.builder()
+                .text(text)
+                .state(state)
+                .userId(userId)
+                .build());
+
+        Long id = savedGoal.getId();
+
+        StateUpdateRequestDto dto = StateUpdateRequestDto.builder()
+                .state(state2)
+                .build();
+        //when
+        mvc.perform(put(url+id)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(new ObjectMapper().writeValueAsString(dto))
+                ).andExpect(status().isOk());
+
+        //then
+        Goals response = goalsRepository.findById(id).orElseThrow();
+        assertThat(response.getState()).isEqualTo(state2);
     }
 
 }

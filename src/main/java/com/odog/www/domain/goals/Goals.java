@@ -30,9 +30,11 @@ public class Goals extends BaseTimeEntity {
         this.state = state;
     }
 
-    public void update(String text, String state) {
+    public void text_update(String text) {
         this.text = text;
+
+    }
+    public void state_update(String state) {
         this.state = state;
     }
-
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class GoalsSaveRequestDto {
+    //목표 저장 dto
 
     private String text; // 목표 내용
     private String state; // 목표 상태 - 목표, 성공, 실패
