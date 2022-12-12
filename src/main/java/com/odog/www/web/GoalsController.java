@@ -1,7 +1,7 @@
 package com.odog.www.web;
 
+import com.odog.www.common.ResultCode;
 import com.odog.www.service.goals.GoalsService;
-import com.odog.www.web.dto.GoalResponseDto;
 import com.odog.www.web.dto.GoalsSaveRequestDto;
 import com.odog.www.web.dto.StateUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,12 @@ public class GoalsController {
 
     @ResponseBody
     @PutMapping("/goals/state/{id}")
-    public GoalResponseDto update(@PathVariable Long id, @RequestBody StateUpdateRequestDto requestDto) {
-        return goalsService.update(id, requestDto);
+    public ResultCode update(@PathVariable Long id, @RequestBody StateUpdateRequestDto requestDto) {
+        if (id == 0) {
+            return ResultCode.PARAMETER_MISSING;
+        } else {
+            return goalsService.update(id, requestDto);
+        }
+
     }
 }

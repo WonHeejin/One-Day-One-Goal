@@ -1,8 +1,8 @@
 package com.odog.www.service.goals;
 
+import com.odog.www.common.ResultCode;
 import com.odog.www.domain.goals.Goals;
 import com.odog.www.domain.goals.GoalsRepository;
-import com.odog.www.web.dto.GoalResponseDto;
 import com.odog.www.web.dto.GoalsSaveRequestDto;
 import com.odog.www.web.dto.StateUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +20,18 @@ public class GoalsService {
     }
 
     @Transactional
-    public GoalResponseDto update(Long id, StateUpdateRequestDto requestDto) {
-        Goals entity = repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 목표가 없습니다. id= "+id));
-        entity.state_update(requestDto.getState());
-        return new GoalResponseDto(entity);
+    public ResultCode update(Long id, StateUpdateRequestDto requestDto) {
+        ResultCode resultCode;
+        Goals entity = repository.findById(id).orElse(null);
+
+        if (entity == null) {
+            resultCode = ResultCode.DB_EMPTY;
+        } else {
+            entity.state_update(requestDto.getState());
+            resultCode = ResultCode.SUCCESS;
+        }
+
+        return resultCode;
 
     }
 }

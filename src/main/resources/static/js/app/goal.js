@@ -18,6 +18,7 @@ var main = {
         _this.delete(this);
     });
     // list 설정
+            //목표 list
            new Sortable(goals_table, {
                 ghostClass: 'goal-background-class',
                 multiDrag: false, // Enable multi-drag
@@ -26,7 +27,7 @@ var main = {
                 draggable: '.goal', //goal 클래스만 드래그 되도록 설정
                 onAdd: function (/**Event*/evt) {//다른 리스트로부터 goal이 drop됐을 때 update
                     var itemEl = evt.item;
-                    alert(itemEl.textContent+"add");
+                    _this.state_update(itemEl.childNodes[1].value, "goal");
                 },
                 onRemove: function (/**Event*/evt) { //goal을 다른 리스트로 옮겨서 delete
                     var itemEl =evt.item;
@@ -34,6 +35,7 @@ var main = {
                 },
             });
 
+            //성공 list
             new Sortable(success_table, {
                 ghostClass: 'success-background-class',
                 multiDrag: true, // Enable multi-drag
@@ -42,14 +44,14 @@ var main = {
                 draggable: '.goal', //goal 클래스만 드래그 되도록 설정
                 onAdd: function (/**Event*/evt) {//다른 리스트로부터 goal이 drop됐을 때 update
                     var itemEl = evt.item;
-                    alert(itemEl.textContent+"add");
+                    _this.state_update(itemEl.childNodes[1].value, "success");
                 },
                 onRemove: function (/**Event*/evt) { //goal을 다른 리스트로 옮겨서 delete
                     var itemEl =evt.item;
                     alert(itemEl.textContent+"remove");
                 },
             });
-
+            //실패 list
             new Sortable(fail_table, {
                 ghostClass: 'fail-background-class',
                 multiDrag: true, // Enable multi-drag
@@ -58,8 +60,7 @@ var main = {
                 draggable: '.goal', //goal 클래스만 드래그 되도록 설정
                 onAdd: function (/**Event*/evt) {//다른 리스트로부터 goal이 drop됐을 때 update
                     var itemEl = evt.item;
-                    console.log(itemEl.getElementsByTagName('input')[0].value);
-                    alert(itemEl.textContent+"add");
+                    _this.state_update(itemEl.childNodes[1].value, "fail");
                 },
                 onRemove: function (/**Event*/evt) { //goal을 다른 리스트로 옮겨서 delete
                     var itemEl =evt.item;
@@ -112,9 +113,32 @@ var main = {
 
         });
     },
-
+// 삭제버튼 눌렀을 때
     delete: function(obj) {
         obj.parentNode.parentNode.remove();
+    },
+// 목표 상태 변경
+    state_update: function(id, p_state) {
+    if(id == null || id == 0) {
+        alert("잘못된 시도입니다.");
+        window.location.reload();
+        return;
+    }
+
+        $.ajax({
+            url: '/goals/state/'+id,
+            type: 'put',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify({state: p_state})
+
+        })
+        .done(function(data) {
+            if(data.code == "0001") {
+                alert("수정에 실패하였습니다. 잠시 후 다시 시도해 주세요.");
+                window.location.reload();
+            };
+        });
     }
 }
 main.init();
