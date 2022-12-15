@@ -28,11 +28,7 @@ var main = {
                 onAdd: function (/**Event*/evt) {//다른 리스트로부터 goal이 drop됐을 때 update
                     var itemEl = evt.item;
                     _this.state_update(itemEl.childNodes[1].value, "goal");
-                },
-                onRemove: function (/**Event*/evt) { //goal을 다른 리스트로 옮겨서 delete
-                    var itemEl =evt.item;
-                    alert(itemEl.textContent+"remove");
-                },
+                }
             });
 
             //성공 list
@@ -45,11 +41,7 @@ var main = {
                 onAdd: function (/**Event*/evt) {//다른 리스트로부터 goal이 drop됐을 때 update
                     var itemEl = evt.item;
                     _this.state_update(itemEl.childNodes[1].value, "success");
-                },
-                onRemove: function (/**Event*/evt) { //goal을 다른 리스트로 옮겨서 delete
-                    var itemEl =evt.item;
-                    alert(itemEl.textContent+"remove");
-                },
+                }
             });
             //실패 list
             new Sortable(fail_table, {
@@ -61,11 +53,7 @@ var main = {
                 onAdd: function (/**Event*/evt) {//다른 리스트로부터 goal이 drop됐을 때 update
                     var itemEl = evt.item;
                     _this.state_update(itemEl.childNodes[1].value, "fail");
-                },
-                onRemove: function (/**Event*/evt) { //goal을 다른 리스트로 옮겨서 delete
-                    var itemEl =evt.item;
-                    alert(itemEl.textContent+"remove");
-                },
+                }
             });
     },
 
@@ -113,17 +101,36 @@ var main = {
 
         });
     },
+
+//id값 검사
+     check_id: function(id) {
+         if(id == null || id == 0) {
+             alert("잘못된 시도입니다.");
+             window.location.reload();
+         }
+     },
+
 // 삭제버튼 눌렀을 때
     delete: function(obj) {
+    const id = obj.parentNode.parentNode.childNodes[1].value;
+    this.check_id(id);
+        $.ajax({
+            url: '/goals/'+id,
+            type: 'delete',
+            contentType: 'application/json charset=utf-8'
+        })
+        .done(function(data) {
+            if(data.code == '0001') {
+                alert("삭제에 실패하였습니다. 잠시 후 다시 시도해 주세요.");
+                window.location.reload();
+            }
+        });
+
         obj.parentNode.parentNode.remove();
     },
 // 목표 상태 변경
     state_update: function(id, p_state) {
-    if(id == null || id == 0) {
-        alert("잘못된 시도입니다.");
-        window.location.reload();
-        return;
-    }
+    this.check_id(id);
 
         $.ajax({
             url: '/goals/state/'+id,

@@ -21,8 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -105,6 +104,29 @@ public class GoalsControllerTest {
         //then
         Goals response = goalsRepository.findById(id).orElseThrow();
         assertThat(response.getState()).isEqualTo(state2);
+    }
+
+    @Test
+    public void delete_Test() throws Exception {
+        //given
+        String text = "test_text";
+        String state = "goal";
+        String userId = "test_user";
+        String url = "http://localhost:"+port+"/goals/";
+        Goals savedGoal = goalsRepository.save(Goals.builder()
+                .text(text)
+                .state(state)
+                .userId(userId)
+                .build());
+
+        Long id = savedGoal.getId();
+
+        //when
+        mvc.perform(delete(url+id))
+                .andExpect(status().isOk());
+
+        List<Goals> response = goalsRepository.findAll();
+        assertThat(response.size()).isEqualTo(0);
     }
 
 }

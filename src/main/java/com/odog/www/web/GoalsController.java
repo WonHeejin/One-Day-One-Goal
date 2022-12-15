@@ -30,4 +30,14 @@ public class GoalsController {
         }
 
     }
+
+    @ResponseBody
+    @DeleteMapping("/goals/{id}")
+    public ResultCode delete(@PathVariable Long id) {
+        if (id == 0) {
+            return ResultCode.PARAMETER_MISSING;
+        }else {
+            return goalsService.delete(id);
+        }
+    }
 }

@@ -34,4 +34,19 @@ public class GoalsService {
         return resultCode;
 
     }
+
+    @Transactional
+    public ResultCode delete(Long id) {
+        ResultCode resultCode;
+        Goals goals = repository.findById(id).orElse(null);
+
+        if (goals == null) {
+            resultCode = ResultCode.DB_EMPTY;
+        } else {
+            repository.deleteById(id);
+            resultCode = ResultCode.SUCCESS;
+        }
+
+        return resultCode;
+    }
 }
