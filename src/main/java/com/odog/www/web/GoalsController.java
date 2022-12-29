@@ -4,6 +4,7 @@ import com.odog.www.common.ResultCode;
 import com.odog.www.service.goals.GoalsService;
 import com.odog.www.web.dto.GoalsSaveRequestDto;
 import com.odog.www.web.dto.StateUpdateRequestDto;
+import com.odog.www.web.dto.TextUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +23,22 @@ public class GoalsController {
 
     @ResponseBody
     @PutMapping("/goals/state/{id}")
-    public ResultCode update(@PathVariable Long id, @RequestBody StateUpdateRequestDto requestDto) {
+    public ResultCode state_update(@PathVariable Long id, @RequestBody StateUpdateRequestDto requestDto) {
         if (id == 0) {
             return ResultCode.PARAMETER_MISSING;
         } else {
-            return goalsService.update(id, requestDto);
+            return goalsService.state_update(id, requestDto);
         }
+    }
 
+    @ResponseBody
+    @PutMapping("/goals/text/{id}")
+    public ResultCode text_update(@PathVariable Long id, @RequestBody TextUpdateRequestDto requestDto) {
+        if (id == 0) {
+            return ResultCode.PARAMETER_MISSING;
+        } else {
+            return goalsService.text_update(id, requestDto);
+        }
     }
 
     @ResponseBody

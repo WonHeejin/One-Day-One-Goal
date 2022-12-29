@@ -5,6 +5,7 @@ import com.odog.www.domain.goals.Goals;
 import com.odog.www.domain.goals.GoalsRepository;
 import com.odog.www.web.dto.GoalsSaveRequestDto;
 import com.odog.www.web.dto.StateUpdateRequestDto;
+import com.odog.www.web.dto.TextUpdateRequestDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,8 @@ public class GoalsControllerTest {
     @Autowired
     private GoalsRepository goalsRepository;
 
+    String url = "http://localhost:"+port;
+
     @Before
     public void mock_setup() { //MockMvc 인스턴스 생성
         mvc = MockMvcBuilders
@@ -58,7 +61,7 @@ public class GoalsControllerTest {
         String text = "test_text";
         String state = "goals";
         String userId = "test_user";
-        String url = "http://localhost:"+port+"/goals";
+        url+= "/goals";
         GoalsSaveRequestDto goals = GoalsSaveRequestDto.builder()
                 .state(state)
                 .userId(userId)
@@ -82,7 +85,7 @@ public class GoalsControllerTest {
         String text = "test_text";
         String state = "goal";
         String userId = "test_user";
-        String url = "http://localhost:"+port+"/goals/state/";
+        url+= "/goals/state/";
         String state2 = "success";
         Goals savedGoal = goalsRepository.save(Goals.builder()
                 .text(text)
@@ -104,6 +107,36 @@ public class GoalsControllerTest {
         //then
         Goals response = goalsRepository.findById(id).orElseThrow();
         assertThat(response.getState()).isEqualTo(state2);
+    }
+
+    @Test
+    public void textUpdate_Text() throws Exception{
+        //given
+        Goals saveGoal =  goalsRepository.save(Goals.builder()
+                .userId("user")
+                .state("G")
+                .text("수정 전")
+                .build());
+
+        String after = "수정 완료";
+        Long id = saveGoal.getId();
+        url+= "/goals/text/";
+
+        TextUpdateRequestDto dto = TextUpdateRequestDto.builder()
+                .text(after).build();
+
+        //when
+
+        mvc.perform(put(url+id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(new ObjectMapper().writeValueAsString(dto)));
+
+        //then
+
+        Goals result = goalsRepository.findById(id).orElseThrow();
+        assertThat(result.getText()).isEqualTo(after);
+
+
     }
 
     @Test
